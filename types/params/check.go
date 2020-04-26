@@ -3,14 +3,15 @@ package params
 import (
 	"errors"
 	"fmt"
+	"strings"
+
 	tokentypes "github.com/okex/okchain-go-sdk/module/token/types"
 	"github.com/okex/okchain-go-sdk/types/crypto/keys"
-	"strings"
 )
 
 const (
 	tokenDescLenLimit = 256
-	countDefault      = 100
+	countDefault      = 10
 	perPageDefault    = 50
 	perPageMax        = 200
 )
@@ -174,16 +175,16 @@ func CheckNewOrderParams(fromInfo keys.Info, passWd string, products, sides, pri
 }
 
 // CheckCancelOrderParams gives a quick validity check for the input params for cancelling orders
-func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIds []string) error {
+func CheckCancelOrderParams(fromInfo keys.Info, passWd string, orderIDs []string) error {
 	if err := CheckKeyParams(fromInfo, passWd); err != nil {
 		return err
 	}
 
 	// check duplicated
 	filter := make(map[string]struct{})
-	for _, id := range orderIds {
+	for _, id := range orderIDs {
 		if _, ok := filter[id]; ok {
-			return fmt.Errorf("failed. duplicated orderId: %s", id)
+			return fmt.Errorf("failed. duplicated orderID: %s", id)
 		}
 
 		filter[id] = struct{}{}
